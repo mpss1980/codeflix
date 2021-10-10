@@ -34,6 +34,8 @@ class GenreTest extends TestCase
             'name' => 'test1'
         ]);
         $genre->refresh();
+
+        $this->assertEquals(36, strlen($genre->id));
         $this->assertEquals('test1', $genre->name);
         $this->assertTrue($genre->is_active);
 
@@ -66,5 +68,15 @@ class GenreTest extends TestCase
         foreach ($data as $key => $value) {
             $this->assertEquals($value, $genre->{$key});
         }
+    }
+
+    public function testDelete()
+    {
+        $genre = factory(Genre::class)->create();
+        $genre->delete();
+        $this->assertNull(Genre::find($genre->id));
+
+        $genre->restore();
+        $this->assertNotNull(Genre::find($genre->id));
     }
 }
